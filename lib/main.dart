@@ -1,9 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:scholarchat/cubits/login_cubit/login_cubit.dart';
 import 'package:scholarchat/screens/chat_page.dart';
 import 'package:scholarchat/screens/login_screen.dart';
 import 'package:scholarchat/screens/register_screen.dart';
 
+import 'cubits/chat_cubit/chat_cubit.dart';
+import 'cubits/register_cubit/register_cubit.dart';
 import 'firebase_options.dart';
 
 void main()async {
@@ -19,14 +23,23 @@ class scholarChat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes:{
-        LoginScreen.id:(context)=>LoginScreen(),
-        RegisterPage.id:(context)=>RegisterPage(),
-        chatPage.id:(context)=>chatPage(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (BuildContext context) => LoginCubit(),),
+        BlocProvider(create: (BuildContext context) => RegisterCubit(),),
+        BlocProvider(create: (BuildContext context) => ChatCubit(),),
 
-      },
-     initialRoute:LoginScreen.id,
+      ],
+
+      child: MaterialApp(
+        routes:{
+          LoginScreen.id:(context)=>LoginScreen(),
+          RegisterPage.id:(context)=>RegisterPage(),
+          chatPage.id:(context)=>chatPage(),
+
+        },
+       initialRoute:LoginScreen.id,
+      ),
     );
   }
 }
